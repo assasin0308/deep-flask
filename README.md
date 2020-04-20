@@ -37,9 +37,12 @@ export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
 # 运行
 source ~/.bashrc
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
 ```
 
-### 3. 
+### 3. hello world
 
 ```python
 
