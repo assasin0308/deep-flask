@@ -50,6 +50,7 @@ pip install -r requirements.txt
 # coding:utf-8
 from flask import Flask,request,\
     render_template,make_response,current_app
+from werkzeug.routing import BaseConverter
 
 app = Flask(
     __name__,
@@ -77,7 +78,7 @@ app = Flask(
 
 # 路由配置
 # 查看所有路由信息: app.url_map
-#
+# 路由转换器 @app.route('/goods/<int:goods_id>')
 
 
 
@@ -91,12 +92,46 @@ def index():
     # print(current_app.config.get('NAME'))
     return 'hello world'
 
+
+# 路由转换器
+# @app.route('/goods/<int:goods_id>') #只接受整型
+@app.route('/goods/<goods_id>') # 接受除 '/' 以外的任何字符
+def goods_detail(goods_id):
+    return 'goods_id is: %s' % goods_id
+
+#------------- 自定义路由转换器 --------------------------------------
+
+# 自定义路由转换器 使用类的方式 继承 werkzeug
+    #  1. from werkzeug.routing import BaseConverter
+    # class RegxConvert(BaseConverter):
+    # 
+    #     def __init__(self,url_map,regex):
+    #         # 调用父类的构造方法
+    #         super(RegxConvert,self).__init__(url_map)
+    #         self.regx = regex
+    # 2. 将自定义的转换器添加至路由中
+    # app.url_map.converters['regx'] = RegxConvert
+
+@app.route("/send_sms/<regx(r'1[34578]\d{9}'):mobile>")
+def send_sms(mobile):
+    return 'send sms to %s ' % mobile
+
+#---------------------------------------------------------------------
+
+
+
+@app.route('/post_only',methods=['POST'])
+def post_only():
+    return 'post only page'
+
+
+
 if __name__ == '__main__':
     # app.run() 参数配置:
     # host: '0.0.0.0' 默认 127.0.0.1
     # port: 5001 默认 5000
     # debug: True/False 开启/关闭debug模式
-    # print(app.url_map) # 查看所有路由信息
+    print(app.url_map) # 查看所有路由信息
     app.run(host='0.0.0.0',debug=True)
 
 
