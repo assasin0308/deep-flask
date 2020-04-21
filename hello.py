@@ -28,7 +28,7 @@ app = Flask(
 
 # 路由配置
 # 查看所有路由信息: app.url_map
-# 06  03:12
+#
 
 
 
@@ -42,11 +42,18 @@ def index():
     # print(current_app.config.get('NAME'))
     return 'hello world'
 
+
+@app.route('/post_only',methods=['POST'])
+def post_only():
+    return 'post only page'
+
+
+
 if __name__ == '__main__':
     # app.run() 参数配置:
     # host: '0.0.0.0' 默认 127.0.0.1
     # port: 5001 默认 5000
     # debug: True/False 开启/关闭debug模式
-    # print(app.url_map)
+    print(app.url_map) # 查看所有路由信息
     app.run(host='0.0.0.0',debug=True)
 
