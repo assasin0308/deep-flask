@@ -55,7 +55,6 @@ def goods_detail(goods_id):
 # 自定义路由转换器 使用类的方式 继承 werkzeug
     #  1. from werkzeug.routing import BaseConverter
     # class RegxConvert(BaseConverter):
-    #
     #     def __init__(self,url_map,regex):
     #         # 调用父类的构造方法
     #         super(RegxConvert,self).__init__(url_map)
@@ -63,9 +62,9 @@ def goods_detail(goods_id):
     # 2. 将自定义的转换器添加至路由中
     # app.url_map.converters['regx'] = RegxConvert
 
-@app.route("/send_sms/<regx(r'1[34578]\d{9}'):mobile>")
-def send_sms(mobile):
-    return 'send sms to %s ' % mobile
+# @app.route("/send_sms/<regx(r'1[34578]\d{9}'):mobile>")
+# def send_sms(mobile):
+#     return 'send sms to %s ' % mobile
 
 #---------------------------------------------------------------------
 

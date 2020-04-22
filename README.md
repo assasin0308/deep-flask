@@ -137,16 +137,97 @@ if __name__ == '__main__':
 
 ```
 
-### 4. 
+### 4. request
 
 ```python
+from flask import Flask,request,\
+    render_template,make_response,current_app,abort,Response
 
+
+app = Flask(__name__)
+
+# request 常用属性说明
+#------------------------------------------------------------------------------
+#        属 性              说 明                            类 型
+#        data       记录请求的数据,并转化为字符串              *
+#        form       记录请求中的表单数据                    MultiDict
+#        args       记录请求中的查询参数                    MultiDict
+#        cookies    记录请求中的cookie信息                  Dict
+#        headers    记录请求中的报文头                      EnvironHeaders
+#        method     记录请求使用的HTTP方法                  GET/POST
+#        url        记录请求的url地址                       String
+#        files      记录请求上传的文件                        *
+#------------------------------------------------------------------------------
+
+
+@app.route('/index',methods=['GET','POST'])
+def index():
+    return 'request study'
+
+# with 上下文管理器
+# with open('./README.md','wb') as f:
+#     f.write('hello assasin')
+
+
+# abort 使用 立即终止视图函数的执行,并返回特定信息
+# from flask import abort
+# from flask import Response
+@app.route('/login')
+def  login():
+    name = ''
+    pwd = ''
+    if name != 'assasin' or pwd != 'admin':
+        abort(400)
+        # resp = Response("login failed")
+        # abort(resp)
+        # abort(标准的http状态码)
+        # abort(传递响应体信息)
+
+    return 'login success'
+
+
+# 自定义错误处理机制
+@app.errorhandler(404)
+def not_found(error):
+    return ' %s' % error ,404
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0',port=5001,debug=True)
 ```
 
-### 5.  
+### 5.  response
 
 ```python
+from flask import Flask,request,\
+    render_template,make_response,current_app
+import json
 
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    # 自定义response
+    # 1. 使用元组,返回自定义响应信息
+    #        响应体     状态码    响应头
+    # return 'index page', 400,    [("name","shibin"),("age",28)]
+    # return 'index page', 666,    {"name":"shibin","city":"beijing"}
+    # 状态码可自定义,可传字符串
+    # return 'index page', "666 success", {"name": "shibin", "city": "beijing"}
+    # 也可不传响应头
+    # return 'index page', "666 success"
+    # 2. 借助 make_response  构造响应信息
+    resp = make_response("index page2 ") # 设置响应体
+    resp.status = "666 shibin" # 设置状态码
+    resp.headers['city'] = "beijing" # 设置响应头
+    return resp
+
+# 构造json格式返回
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0',port=5001,debug=True)
 ```
 
 ### 6.  
@@ -233,10 +314,36 @@ if __name__ == '__main__':
 
 ```
 
-### 20.   
+### 20.   flask + gunicorn + nginx
 
-```python
+```shell
+# pip install gunicore
+ gunicorn -w 4 -b 127.0.0.1:5000 -D --access-logfile ./logs/log  main:app
+ gunicorn -w 4 -b 127.0.0.1:5001 -D --access-logfile ./logs/log  main:app
+# -w n 开启n个进程 worker
+# -b 127.0.0.0:5000 绑定至哪个服务器
+# -D 以后台守护进程方式运行
+#  --access-logfile DIR/FILE 日志文件存储路径
+# main:app  main.py的app对象
 
+ # 配置 nginx负载均衡
+ upstram flask {
+     server 127.0.0.1:5000;
+     server 127.0.0.1:5001;
+ }
+ server {
+     listen      80;
+     server_name  localhost;
+
+     location / {
+         proxy_pass http://flask;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+     }
+ }
+
+ # restart nginx server
+ usr/local/sbin/nginx -s reload
 ```
 
 ### 21.  
