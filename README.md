@@ -200,7 +200,7 @@ if __name__ == '__main__':
 
 ```python
 from flask import Flask,request,\
-    render_template,make_response,current_app,jsonify
+    render_template,make_response,current_app,jsonify,session
 
 
 app = Flask(__name__)
@@ -233,7 +233,55 @@ def json():
     # return json_str,200,{"Content-Type" :"application/json"}
     # jsonify() 将数据转为json格式,并设置响应头格式为: "Content-Type" :"application/json"
     # return jsonify(data)
-    # return jsonify(city="beijing",country="china")
+    return jsonify(city="beijing",country="china")
+
+
+# ----------------------  Cookie 操作---------------------------------
+@app.route('/set_cookie')
+def set_cookie():
+    resp = make_response("success")
+    resp.set_cookie("name","shibin") #  默认临时有效,浏览器关闭即可失效
+    resp.set_cookie("city","beijing",max_age=3600) #  max_age 设置有效期 单位:秒
+    resp.headers['Set-Cookie'] = 'city2=xian; Expires=Wed, 22-Apr-2020 15:49:22 GMT; Max-Age=3600; Path=/'
+    return resp
+
+@app.route('/get_cookie')
+def get_cookie():
+    name = request.cookies.get('name','')
+    city = request.cookies.get('city','')
+    return name + city
+
+
+@app.route('/delete_cookie')
+def delete_cookie():
+    resp = make_response("delete success")
+    resp.delete_cookie("name")
+    return resp
+
+# ----------------------  session 机制 ---------------------------------
+# from flask impoer session
+# 设置session,需要设置秘钥字符串
+# flask session需要的秘钥字符串
+app.config['SECRET_KEY'] = 'cndsjkfncjkdsnvk165d45e4d0'
+@app.route('/set_session')
+def set_session():
+    session['name'] = "assasinsteven"
+    session['age'] = 235
+    session['mobile'] = '18311039502 '
+    return 'set session success'
+
+@app.route('/get_session')
+def get_session():
+    name = session.get('name')
+    age = session.get('age')
+    return 'get session success,name: %s,age:%s' %(name,age)
+
+
+@app.route('/delete_session')
+def delete_session():
+    """"""
+    return "delete session success"
+
 
 
 if __name__ == '__main__':
