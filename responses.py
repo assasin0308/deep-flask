@@ -35,6 +35,32 @@ def json():
     return jsonify(city="beijing",country="china")
 
 
+# ----------------------  Cookie 操作---------------------------------
+@app.route('/set_cookie')
+def set_cookie():
+    resp = make_response("success")
+    resp.set_cookie("name","shibin") #  默认临时有效,浏览器关闭即可失效
+    resp.set_cookie("city","beijing",max_age=3600) #  max_age 设置有效期 单位:秒
+    resp.headers['Set-Cookie'] = 'city2=xian; Expires=Wed, 22-Apr-2020 15:49:22 GMT; Max-Age=3600; Path=/'
+    return resp
+
+@app.route('/get_cookie')
+def get_cookie():
+    name = request.cookies.get('name','')
+    city = request.cookies.get('city','')
+    return name + city
+
+
+@app.route('/delete_cookie')
+def delete_cookie():
+    resp = make_response("delete success")
+    resp.delete_cookie("name")
+    return resp
+
+# ----------------------  session 机制 ---------------------------------
+
+
+
 
 
 
