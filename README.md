@@ -200,8 +200,7 @@ if __name__ == '__main__':
 
 ```python
 from flask import Flask,request,\
-    render_template,make_response,current_app
-import json
+    render_template,make_response,current_app,jsonify
 
 
 app = Flask(__name__)
@@ -224,6 +223,17 @@ def index():
     return resp
 
 # 构造json格式返回
+@app.route('/json')
+def json():
+    data = {
+        "name" : "shibin",
+        "age" : 25
+    }
+    # json_str = json.dumps(data)
+    # return json_str,200,{"Content-Type" :"application/json"}
+    # jsonify() 将数据转为json格式,并设置响应头格式为: "Content-Type" :"application/json"
+    # return jsonify(data)
+    # return jsonify(city="beijing",country="china")
 
 
 if __name__ == '__main__':
