@@ -1,5 +1,5 @@
 from flask import Flask,request,\
-    render_template,make_response,current_app,jsonify,session,url_for
+    render_template,make_response,current_app,jsonify,session,url_for,g
 
 
 app = Flask(__name__)
@@ -116,7 +116,20 @@ def handle_teardown_request(response):
     print("handle_teardown_request 被执行")
     return response
 
+#----------------------------------------------------------------------------
+# g 变量 存储变量的容器
+# from flask import g
+@app.route('/g')
+def g_var():
+    g.username = "shibin"
+    g.city = '北京'
+    g.address = '北京昌平区'
+    return 'g 变量'
 
+def say_hello():
+    username = g.username
+    city = g.city
+    pass
 
 
 if __name__ == '__main__':
