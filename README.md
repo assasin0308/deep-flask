@@ -606,7 +606,8 @@ if __name__ == '__main__':
 ### 10.  SQLAlchemy
 
 ```python
-
+# pip install flask-sqlalchemy
+# pip install flask-mysqldb
 ```
 
 ### 11. 
