@@ -5,11 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<form action="/register" method="post">
-{#    <p> 用户名: <input type="text" name="username"> </p>#}
-{#    <p> 用户密码: <input type="password" name="userpwd"></p>#}
-{#    <p>确认密码: <input type="password" name="userpwd2"></p>#}
-{#    <p><button type="submit">登录</button></p>#}
+<form  method="post">
+    {{ form.csrf_token }}
    <p>
         {{ form.username.label  }}
    </p>
@@ -34,7 +31,7 @@
 
      <p>
         {{ form.password2.label  }}
-   </p>
+     </p>
     <p>
         {{ form.password2 }}
     </p>
@@ -44,6 +41,26 @@
     {% endfor %}
 
     {{ form.submit }}
+
+
+{# 宏  #}
+{% macro input() %}
+    <input type="text" value="" size="30">
+{% endmacro %}
+
+<h1>第一次调用</h1>
+{{ input() }}
+<h1>第二次调用</h1>
+{{ input() }}
+
+    <hr />
+<h1>定义带参数的宏</h1>
+{% macro input2(type="text",value="",size=30) %}
+    <input type="{{ type }}" value="{{ value }}" size="{{ size }}">
+{% endmacro %}
+<h1>带参数的宏</h1>
+{{ input2('password','',15) }}
+
 
 </form>
 </body>

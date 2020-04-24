@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect,url_for,session
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField
 from wtforms.validators import DataRequired,Length,EqualTo
@@ -21,18 +21,26 @@ class RegisterForm(FlaskForm):
 
 @app.route('/')
 def index():
-    return 'index page'
+    username = session.get("username"," ")
+    return 'index page %s' % username
 
 
 
 @app.route('/register',methods=['GET','POST'])
 def login():
-    # 创建form表单对象
+    # 创建form表单对象,如果是post请求,前段提交了数据
+    # flask会把数据在构造form对象的时候,存放到对象中;无需判断请求方法
     form = RegisterForm()
-    if request.method == 'POST':
-        pass
-    else:
-        return render_template('register.html',form = form)
+    # 判断 form 表单数据 若数据满足所有的验证器 返回 true ;or false
+    if form.validate_on_submit():
+        # 验证通过
+        username = form.username.data
+        password = form.password.data
+        password2 = form.password2.data
+        session['username'] = username
+        return redirect(url_for('index'))
+
+    return render_template('register.html',form = form)
 
 
 if __name__ == '__main__':
