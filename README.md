@@ -772,7 +772,7 @@ app = Flask(__name__)
 manager = Manager(app)
 
 class Config(object):
-    SQLALCHEMY_DATABASE_URI = "mysql://root:19920308shibin@127.0.0.1:3306/flask_study"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:root@127.0.0.1:3306/flask_study"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = True
 
@@ -816,8 +816,8 @@ app.config.update(
     MAIL_SERVER = 'smtp.sina.com',
     MAIL_PORT = 465,
     MAIL_USE_TLS= True,
-    MAIL_USERNAME =  'assasin0308@sina.com',
-    MAIL_PASSWORD =  '19920308shibin',
+    MAIL_USERNAME =  'assasin@sina.com',
+    MAIL_PASSWORD =  '*******',
 
 )
 ```
@@ -834,15 +834,15 @@ app.config.update(
     MAIL_SERVER = 'smtp.sina.com',
     MAIL_PORT = 465,
     MAIL_USE_TLS= True,
-    MAIL_USERNAME =  'assasin0308@sina.com',
-    MAIL_PASSWORD =  '19920308shibin', # 密码 / 授权码
+    MAIL_USERNAME =  'assasin@sina.com',
+    MAIL_PASSWORD =  '*******', # 密码 / 授权码
 )
 mail = Mail(app)
 
 @app.route('/')
 def index():
     # sender 发送方 ; recipients 接收方
-    msg = Message("this is a test",sender='assasin0308@sina.com',recipients=['839203143@qq.com'])
+    msg = Message("this is a test",sender='assasin@sina.com',recipients=['8392@qq.com'])
     # 邮件内容
     msg.body = "flask is best"
     # 发送
