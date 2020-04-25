@@ -2,6 +2,7 @@ from flask import Flask,render_template,\
     request,redirect,url_for,session
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_,func
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -44,6 +45,10 @@ class Role(db.Model):
 
     users = db.relationship("User",backref='role')
 
+    def __repr__(self):
+        """定义后 可以让显示对象时更加直观"""
+        return " Role object: name = %s" % self.name
+
 
 class User(db.Model):
     """ user 数据表"""
@@ -54,6 +59,10 @@ class User(db.Model):
     email = db.Column(db.String(128),unique=True)
     password = db.Column(db.String(64))
     role_id = db.Column(db.Integer,db.ForeignKey('tbl_roles.id'))
+
+    def __repr__(self):
+        """定义后 可以让显示对象时更加直观"""
+        return " User object: name = %s" % self.name
 
 
 
@@ -86,11 +95,36 @@ if __name__ == '__main__':
     # Role.query.first()  # 查询一条 第一条记录
     # Role.query.get(主键)  # 查询一条 只接受主键值
 
-    # User.query.filter_by(name='wang',role_id=1).first() # 过滤查询 and
-
     # db.session.query(Role).all() # db 查询
+
+    # User.query.filter_by(User.name='wang',User.role_id=1).first() # 过滤查询 and
+    # User.query.filter=(User.name=='wang',User.role_id==1).first() # 过滤查询 and
+    # or_ 关系
+    # User.query.filter=(or_(User.name=='wang',User.email.endswith('163.com'))).first() # 过滤查询 or
+    # limit
+    # User.query.filter().offset().limit().order_by(User.id.desc()).all()
+    # order_by
+    # User.query.filter().order_by(User.id.asc()).all()
+    # group_by  from sqlalchemy import func
+    # users = db.session.query(User.role_id,func.count(User.role_id)).group_by(User.role_id).all()
+
+    # update 先查询,后保存
+    # user = User.query.first()
+    # user.name = 'shibin'
+    # db.session.add(user)
+    # db.session.commit()
+
+    # 查询时更新
+    # User.query.filter_by(name='zhou').update({"name":"assasin","email":"assasin@163.com"})
+    # db.session.commit()
+
+    # delete
+    # user = User.query.get(3)
+    # db.session.delete(user)
+    # db.session.commit()
+    
 
 
     # app.run('0.0.0.0',port=5001,debug=True)
-    05_sqlalchemy 15
+
 
