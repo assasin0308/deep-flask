@@ -8,7 +8,7 @@ app = Flask(__name__)
 def login():
    user_name = request.form.get('user_name')
    password = request.form.get('password')
-
+   a = 1 / 0
    if not all([user_name,password]):
        resp = {
            "errcode": 1,
